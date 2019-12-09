@@ -87,10 +87,8 @@ class Graph:
         visited = set()
         queue = Queue()
         queue.enqueue([starting_vertex])
-        while queue.size:
+        while queue.size():
             current_path = queue.dequeue()
-            if current_path is None:
-                break
             current_vert = current_path[-1]
             if current_vert == destination_vertex:
                 return current_path
@@ -106,7 +104,7 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        pass
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
