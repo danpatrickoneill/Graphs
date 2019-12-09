@@ -21,6 +21,8 @@ class Graph:
         """
         if v1 in self.vertices and v2 in self.vertices:
             self.vertices[v1].add(v2)
+        else:
+            raise IndexError("Vertex not found.")
 
     def get_neighbors(self, vertex_id):
         """
@@ -29,7 +31,7 @@ class Graph:
         if vertex_id in self.vertices:
             return self.vertices[vertex_id]
         else:
-            return set()
+            raise IndexError("Vertex not found.")
 
     def bft(self, starting_vertex):
         """
@@ -69,14 +71,22 @@ class Graph:
             for vert in self.get_neighbors(current_vert):
                 stack.push(vert)
                 
-    def dft_recursive(self, starting_vertex):
+    def dft_recursive(self, starting_vertex, visited = set()):
         """
         Print each vertex in depth-first order
         beginning from starting_vertex.
 
         This should be done using recursion.
         """
-        pass  # TODO
+        # stack = Stack()
+        # stack.push(starting_vertex)
+        # while stack.size:
+        #     current_vert = stack.pop()
+        print(f"Recursive DFT: {starting_vertex}")
+        visited.add(starting_vertex)
+        for vert in self.get_neighbors(starting_vertex):
+            if vert not in visited:
+                self.dft_recursive(vert, visited)
 
     def bfs(self, starting_vertex, destination_vertex):
         """
@@ -84,7 +94,7 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        pass
 
     def dfs(self, starting_vertex, destination_vertex):
         """
