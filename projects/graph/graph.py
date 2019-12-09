@@ -41,16 +41,13 @@ class Graph:
         queue = Queue()
         queue.enqueue(starting_vertex)
         visited = set()
-        while queue.size:
+        while queue.size():
             current_vert = queue.dequeue()
-            while current_vert in visited:
-                current_vert = queue.dequeue()
-            if current_vert is None:
-                break
-            print(f"BFT: {current_vert}")
-            visited.add(current_vert)
-            for vert in self.get_neighbors(current_vert):
-                queue.enqueue(vert)
+            if current_vert not in visited:
+                print(f"BFT: {current_vert}")
+                visited.add(current_vert)
+                for vert in self.get_neighbors(current_vert):
+                    queue.enqueue(vert)
 
     def dft(self, starting_vertex):
         """
@@ -60,16 +57,13 @@ class Graph:
         stack = Stack()
         stack.push(starting_vertex)
         visited = set()
-        while stack.size:
+        while stack.size():
             current_vert = stack.pop()
-            while current_vert in visited:
-                current_vert = stack.pop()
-            if current_vert is None:
-                break        
-            print(f"DFT: {current_vert}")
-            visited.add(current_vert)
-            for vert in self.get_neighbors(current_vert):
-                stack.push(vert)
+            if current_vert not in visited:                
+                print(f"DFT: {current_vert}")
+                visited.add(current_vert)
+                for vert in self.get_neighbors(current_vert):
+                    stack.push(vert)
                 
     def dft_recursive(self, starting_vertex, visited = set()):
         """
