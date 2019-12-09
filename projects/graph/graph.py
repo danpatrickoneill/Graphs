@@ -138,15 +138,21 @@ class Graph:
         if visited is None:
             visited = set()
         if path is None:
-            path = []
-        path.append(starting_vertex)
+            path = [starting_vertex]
         visited.add(starting_vertex)
+        # print(starting_vertex, destination_vertex, starting_vertex == destination_vertex)
         if starting_vertex == destination_vertex:
+            print("Returning True!")
             return path
+        # print(starting_vertex, destination_vertex, visited, path)
+        # print(self.get_neighbors(starting_vertex))
         for vert in self.get_neighbors(starting_vertex):
-            print(self.get_neighbors(starting_vertex))
             if vert not in visited:
-                return self.dfs_recursive(vert, destination_vertex, visited, path)
+                print(starting_vertex, vert, visited, path)
+                return_path = self.dfs_recursive(vert, destination_vertex, visited, path=path+[vert])
+                if return_path:
+                    return return_path
+        return False
 
 
 if __name__ == '__main__':
@@ -175,7 +181,7 @@ if __name__ == '__main__':
         {1: {2}, 2: {3, 4}, 3: {5}, 4: {6, 7}, 5: {3}, 6: {3}, 7: {1, 6}}
     '''
     print(graph.vertices)
-    breakpoint()
+
     '''
     Valid BFT paths:
         1, 2, 3, 4, 5, 6, 7
@@ -215,4 +221,4 @@ if __name__ == '__main__':
         [1, 2, 4, 7, 6]
     '''
     print(graph.dfs(1, 6))
-    print(graph.dfs_recursive(1,6))
+    print(graph.dfs_recursive(1, 6))
