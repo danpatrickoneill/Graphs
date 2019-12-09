@@ -72,10 +72,6 @@ class Graph:
 
         This should be done using recursion.
         """
-        # stack = Stack()
-        # stack.push(starting_vertex)
-        # while stack.size:
-        #     current_vert = stack.pop()
         print(f"Recursive DFT: {starting_vertex}")
         visited.add(starting_vertex)
         for vert in self.get_neighbors(starting_vertex):
