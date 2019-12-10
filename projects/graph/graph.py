@@ -140,15 +140,10 @@ class Graph:
         if path is None:
             path = [starting_vertex]
         visited.add(starting_vertex)
-        # print(starting_vertex, destination_vertex, starting_vertex == destination_vertex)
         if starting_vertex == destination_vertex:
-            print("Returning True!")
             return path
-        # print(starting_vertex, destination_vertex, visited, path)
-        # print(self.get_neighbors(starting_vertex))
         for vert in self.get_neighbors(starting_vertex):
             if vert not in visited:
-                print(starting_vertex, vert, visited, path)
                 return_path = self.dfs_recursive(vert, destination_vertex, visited, path=path+[vert])
                 if return_path:
                     return return_path
