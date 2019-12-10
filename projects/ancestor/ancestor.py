@@ -10,10 +10,21 @@ def earliest_ancestor(ancestors, starting_node):
         tree.add_edge(child, parent)
     # if not tree.get_neighbors(starting_node):
     #     return -1
-    result = tree.bft(starting_node)
-    if len(result) == 1:
+    path = []
+    queue = Queue()
+    queue.enqueue(starting_node)
+    visited = set()
+    while queue.size():
+        node = queue.dequeue()
+        if node not in visited:
+            visited.add(node)
+            path.append(node)
+            for n in tree.get_neighbors(node):
+                queue.enqueue(n)
+    if len(path) == 1:
         return -1
-    return result[-1]
+    print(starting_node, path)
+    return path[-1]
 
 # Recursive, non-graph solution
 # parents = [t for t in ancestors if t[1] == starting_node]
