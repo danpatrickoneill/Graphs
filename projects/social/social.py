@@ -1,4 +1,5 @@
-
+import random
+from util import names
 
 class User:
     def __init__(self, name):
@@ -16,11 +17,14 @@ class SocialGraph:
         """
         if user_id == friend_id:
             print("WARNING: You cannot be friends with yourself")
+            return False
         elif friend_id in self.friendships[user_id] or user_id in self.friendships[friend_id]:
             print("WARNING: Friendship already exists")
+            return False
         else:
             self.friendships[user_id].add(friend_id)
             self.friendships[friend_id].add(user_id)
+            return True
 
     def add_user(self, name):
         """
@@ -45,11 +49,19 @@ class SocialGraph:
         self.users = {}
         self.friendships = {}
         # !!!! IMPLEMENT ME
-
         # Add users
+        for _ in range(numUsers):
+            self.add_user(random.choice(names))
 
         # Create friendships
-
+        total_friendships = (numUsers * avgFriendships) / 2
+        count = 0
+        print(total_friendships)
+        while (count < total_friendships):
+            friend_one = random.randint(1, numUsers - 1)
+            print(numUsers, friend_one)
+            if self.add_friendship(friend_one, random.randint(friend_one + 1, numUsers)):
+                count += 1
     def get_all_social_paths(self, user_id):
         """
         Takes a user's user_id as an argument
