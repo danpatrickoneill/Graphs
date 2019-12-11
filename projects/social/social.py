@@ -17,14 +17,14 @@ class SocialGraph:
         """
         if user_id == friend_id:
             print("WARNING: You cannot be friends with yourself")
-            return False
+            # return False
         elif friend_id in self.friendships[user_id] or user_id in self.friendships[friend_id]:
             print("WARNING: Friendship already exists")
-            return False
+            # return False
         else:
             self.friendships[user_id].add(friend_id)
             self.friendships[friend_id].add(user_id)
-            return True
+            # return True
 
     def add_user(self, name):
         """
@@ -56,14 +56,23 @@ class SocialGraph:
             self.add_user(random.choice(names))
 
         # Create friendships
-        total_friendships = (numUsers * avgFriendships) / 2
-        count = 0
-        print(total_friendships)
-        while (count < total_friendships):
-            friend_one = random.randint(1, numUsers - 1)
-            print(numUsers, friend_one)
-            if self.add_friendship(friend_one, random.randint(friend_one + 1, numUsers)):
-                count += 1
+        total_friendships = (numUsers * avgFriendships) // 2
+        # count = 0
+        # while (count < total_friendships):
+        #     friend_one = random.randint(1, numUsers - 1)
+        #     # print(numUsers, friend_one)
+        #     if self.add_friendship(friend_one, random.randint(friend_one + 1, numUsers)):
+        #         count += 1
+        potential_friendships = []
+        for i in range(1, numUsers):
+            for j in range(i+1, numUsers + 1):
+                potential_friendships.append((i, j))
+        # print(potential_friendships)
+        random.shuffle(potential_friendships)
+        for pair in potential_friendships[:total_friendships]:
+            self.add_friendship(pair[0], pair[1])
+
+
     def get_all_social_paths(self, user_id):
         """
         Takes a user's user_id as an argument
@@ -79,6 +88,7 @@ class SocialGraph:
         queue.enqueue([user_id])
         while queue.size():
             path = queue.dequeue()
+            # print(path)
             user = path[-1]
             if user not in visited:
                 visited[user] = path
@@ -93,6 +103,6 @@ class SocialGraph:
 if __name__ == '__main__':
     sg = SocialGraph()
     sg.populate_graph(10, 2)
-    print(sg.friendships)
+    # print(sg.friendships)
     connections = sg.get_all_social_paths(1)
     print(connections)
