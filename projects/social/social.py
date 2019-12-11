@@ -48,7 +48,6 @@ class SocialGraph:
         self.last_id = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLMENT ME
         if avgFriendships >= numUsers:
             print("Error: number of users must be greater than average number of friendships.")
             return
@@ -75,7 +74,7 @@ class SocialGraph:
         The key is the friend's ID and the value is the path.
         """
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+
         queue = Queue()
         queue.enqueue([user_id])
         while queue.size():
