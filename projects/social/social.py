@@ -1,5 +1,5 @@
 import random
-from util import names
+from util import names, Stack, Queue
 
 class User:
     def __init__(self, name):
@@ -48,7 +48,10 @@ class SocialGraph:
         self.last_id = 0
         self.users = {}
         self.friendships = {}
-        # !!!! IMPLEMENT ME
+        # !!!! IMPLMENT ME
+        if avgFriendships >= numUsers:
+            print("Error: number of users must be greater than average number of friendships.")
+            return
         # Add users
         for _ in range(numUsers):
             self.add_user(random.choice(names))
