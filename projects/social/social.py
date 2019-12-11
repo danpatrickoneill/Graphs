@@ -76,6 +76,18 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        queue = Queue()
+        queue.enqueue([user_id])
+        while queue.size():
+            path = queue.dequeue()
+            user = path[-1]
+            if user not in visited:
+                visited[user] = path
+
+                for friend in self.friendships[user]:
+                    new_path = path.copy()
+                    new_path.append(friend)
+                    queue.enqueue(new_path)
         return visited
 
 
