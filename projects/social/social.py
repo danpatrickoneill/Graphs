@@ -52,7 +52,7 @@ class SocialGraph:
             print("Error: number of users must be greater than average number of friendships.")
             return
         # Add users
-        for _ in range(numUsers):
+        for i in range(numUsers):
             self.add_user(random.choice(names))
 
         # Create friendships
@@ -67,7 +67,7 @@ class SocialGraph:
         for i in range(1, numUsers):
             for j in range(i+1, numUsers + 1):
                 potential_friendships.append((i, j))
-        # print(potential_friendships)
+        print(potential_friendships)
         random.shuffle(potential_friendships)
         for pair in potential_friendships[:total_friendships]:
             self.add_friendship(pair[0], pair[1])
@@ -88,7 +88,6 @@ class SocialGraph:
         queue.enqueue([user_id])
         while queue.size():
             path = queue.dequeue()
-            # print(path)
             user = path[-1]
             if user not in visited:
                 visited[user] = path
@@ -97,12 +96,14 @@ class SocialGraph:
                     new_path = path.copy()
                     new_path.append(friend)
                     queue.enqueue(new_path)
-        return visited
+        visited_names = {self.users[key].name: [self.users[num].name for num in visited[key]] for key in visited}
+        print(visited)
+        return visited_names
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
     sg.populate_graph(10, 2)
-    # print(sg.friendships)
+    print(sg.friendships)
     connections = sg.get_all_social_paths(1)
     print(connections)
