@@ -97,8 +97,8 @@ class SocialGraph:
                     new_path.append(friend)
                     queue.enqueue(new_path)
         visited_names = {self.users[key].name: [self.users[num].name for num in visited[key]] for key in visited}
-        print(visited)
-        return visited_names
+        print(visited_names)
+        return visited
 
 
 if __name__ == '__main__':
