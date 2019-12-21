@@ -3,6 +3,7 @@ from player import Player
 from world import World
 
 import random
+from collections import deque
 
 # Load world
 world = World()
@@ -17,24 +18,124 @@ roomGraph={494: [(1, 8), {'e': 457}], 492: [(1, 20), {'e': 400}], 493: [(2, 5), 
 world.loadGraph(roomGraph)
 
 # UNCOMMENT TO VIEW MAP
-world.printRooms()
+# world.printRooms()
 
 player = Player("Name", world.startingRoom)
 
+
 # Fill this out
 traversalPath = []
+directions = ['n', 'e', 's', 'w']
+opposite_directions = {'n': 's', 'e': 'w', 's': 'n', 'w': 'e'}
 
+def random_direction():
+    return random.choice(directions)
+
+# def update_map(player, prev_room, curr_room):
+#     pass
+
+def fully_explored(rooms):
+    for room in rooms:
+        for e in rooms[room]:
+            print(f"In fully explored: {rooms[room], e}")
+            if rooms[room][e] == '?':
+                print(False)
+                return False
+    print(True)
+    return True
+
+def find_new_path(explored_rooms, room):
+    # print(f"Finding new path in rooms: {explored_rooms} starting from Room {room.id}")
+    queue = deque()
+    queue.appendleft([(room.id, None)])
+    visited = set()
+    while len(queue):
+        current_path = queue.pop()
+        # print(current_path)
+        current_room = current_path[-1]
+        # print(current_room)
+        current_room_id = current_room[0]
+        if current_room_id not in visited:
+            visited.add(current_room_id)    
+            for e in explored_rooms[current_room_id]:
+                if explored_rooms[current_room_id][e] == '?':
+                    new_path = current_path.copy()
+                    new_path.append((explored_rooms[current_room_id][e], e))
+                    travel_path = deque([t[1] for t in new_path[1:]])
+                    # print(travel_path)
+                    return travel_path
+                else:
+                    new_path = current_path.copy()
+                    new_path.append((explored_rooms[current_room_id][e], e))
+                    queue.appendleft(new_path)
+
+def explore():
+    rooms = {}
+    previous_room = None
+    count = 0
+    travel_path = deque()
+    while len(rooms) < len(roomGraph):
+    # while count < 10:
+        current_room = player.currentRoom
+        current_exits = current_room.getExits()
+        # print(f"Current room: {current_room.id} with exits to: {current_exits}")
+        if current_room.id not in rooms:
+            rooms[current_room.id] = {e: '?' for e in current_exits}
+            # print(f"Rooms with new room just added: {rooms}")
+        unexplored = [e for e in current_exits if rooms[current_room.id][e] == '?']
+        # print(f"Unexplored: {unexplored}")
+        if len(travel_path):
+            next_move = travel_path.popleft()
+        elif len(unexplored):
+            next_move = random.choice(unexplored)
+        else:
+            # try:
+            #     next_move = random.choice([e for e in current_exits if rooms[current_room.id][e] != previous_room.id])
+            # except:
+            #     next_move = opposite_directions[next_move]
+            travel_path = find_new_path(rooms, current_room)
+            next_move = travel_path.popleft()
+
+        previous_room = current_room
+        traversalPath.append(next_move)
+        player.travel(next_move)
+        # print(f"Next move: {next_move}")
+        current_room = player.currentRoom
+        # print(f"Moved from room {previous_room.id} to room {current_room.id}")
+        if current_room.id not in rooms:
+            current_exits = current_room.getExits()
+            rooms[current_room.id] = {e: '?' for e in current_exits}
+            # print(f"Rooms with new room just added: {rooms}")
+        rooms[previous_room.id][next_move] = current_room.id
+        # print(previous_room.id, current_room.id)
+        rooms[current_room.id][opposite_directions[next_move]] = previous_room.id
+        # print("Connecting back, ",current_room.id, opposite_directions[next_move], previous_room.id)
+        # if len(rooms) % 50 == 0:
+        #     print(f"Rooms so far: {rooms}")
+        # print(f"Traversal path: {traversalPath}")
+        count += 1
+    # print(rooms)
+
+    
 
 
 # TRAVERSAL TEST
+# My function that sets up traversal path
+explore()
+
 visited_rooms = set()
 player.currentRoom = world.startingRoom
-visited_rooms.add(player.currentRoom)
+visited_rooms.add(player.currentRoom.id)
+
+
+# print(traversalPath)
+# print(len(traversalPath))
 
 for move in traversalPath:
     player.travel(move)
-    visited_rooms.add(player.currentRoom)
+    visited_rooms.add(player.currentRoom.id)
 
+# print(visited_rooms)
 if len(visited_rooms) == len(roomGraph):
     print(f"TESTS PASSED: {len(traversalPath)} moves, {len(visited_rooms)} rooms visited")
 else:
