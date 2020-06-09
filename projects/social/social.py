@@ -57,20 +57,23 @@ class SocialGraph:
 
         # Create friendships
         total_friendships = (numUsers * avgFriendships) // 2
-        # count = 0
-        # while (count < total_friendships):
-        #     friend_one = random.randint(1, numUsers - 1)
-        #     # print(numUsers, friend_one)
-        #     if self.add_friendship(friend_one, random.randint(friend_one + 1, numUsers)):
-        #         count += 1
-        potential_friendships = []
-        for i in range(1, numUsers):
-            for j in range(i+1, numUsers + 1):
-                potential_friendships.append((i, j))
-        print(potential_friendships)
-        random.shuffle(potential_friendships)
-        for pair in potential_friendships[:total_friendships]:
-            self.add_friendship(pair[0], pair[1])
+        count = 0
+        while (count < total_friendships):
+            friend_one = random.randint(1, numUsers)
+            friend_two = random.randint(1, numUsers)
+            # print(numUsers, friend_one)
+            # print(friend_two not in self.friendships[friend_one], friend_one not in self.friendships[friend_two])
+            if friend_one != friend_two and friend_two not in self.friendships[friend_one]:
+                self.add_friendship(friend_one, friend_two)
+                count += 1
+        # potential_friendships = []
+        # for i in range(1, numUsers):
+        #     for j in range(i+1, numUsers + 1):
+        #         potential_friendships.append((i, j))
+        # # print(potential_friendships)
+        # random.shuffle(potential_friendships)
+        # for pair in potential_friendships[:total_friendships]:
+        #     self.add_friendship(pair[0], pair[1])
 
 
     def get_all_social_paths(self, user_id):
@@ -96,14 +99,19 @@ class SocialGraph:
                     new_path = path.copy()
                     new_path.append(friend)
                     queue.enqueue(new_path)
-        visited_names = {self.users[key].name: [self.users[num].name for num in visited[key]] for key in visited}
+        # visited = {key: visited[key][1:] for key in visited}
+        visited_names = {self.users[key].name: [self.users[user_id].name for user_id in visited[key]] for key in visited}
+        # for user_id in visited[1]:
+            # print(user_id)
         print(visited_names)
         return visited
 
 
 if __name__ == '__main__':
     sg = SocialGraph()
-    sg.populate_graph(10, 2)
+    sg.populate_graph(25, 5)
     print(sg.friendships)
+    print("---------------------------------------")
     connections = sg.get_all_social_paths(1)
     print(connections)
+    # print(len(connections) / len(sg.users))
