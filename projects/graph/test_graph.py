@@ -53,7 +53,7 @@ class Test(unittest.TestCase):
             "1\n2\n4\n3\n7\n6\n5\n",
             "1\n2\n4\n3\n7\n5\n6\n"
         ]
-
+        
         stdout_ = sys.stdout
         sys.stdout = io.StringIO()
         self.graph.bft(1)
